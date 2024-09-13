@@ -5,7 +5,7 @@ import jan.ondra.insights.exception.InvalidRequestDataException
 fun EmailDto.validate() {
     if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$".toRegex())) {
         throw InvalidRequestDataException(
-            errorCause = "Provided email has invalid format: $email",
+            serverLog = "Provided email has invalid format: $email",
             clientInfo = "Provided email has invalid format: $email"
         )
     }

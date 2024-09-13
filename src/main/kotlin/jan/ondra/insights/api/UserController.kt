@@ -1,5 +1,7 @@
 package jan.ondra.insights.api
 
+import jan.ondra.insights.business.UserService
+import jan.ondra.insights.models.User
 import jan.ondra.insights.util.getUserIdFromBearerToken
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus.CREATED
@@ -17,26 +19,32 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/users")
 @CrossOrigin("http://localhost:3000")
-class UserController {
+class UserController(private val userService: UserService) {
 
     @PostMapping
     @ResponseStatus(CREATED)
     fun registerUser(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody emailDto: EmailDto) {
         emailDto.validate()
-        println(getUserIdFromBearerToken(bearerToken))
+        userService.create(User(
+            id = getUserIdFromBearerToken(bearerToken),
+            email = emailDto.email
+        ))
     }
 
     @PatchMapping
     @ResponseStatus(NO_CONTENT)
     fun updateUserEmail(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody emailDto: EmailDto) {
         emailDto.validate()
-        println("success")
+        userService.update(User(
+            id = getUserIdFromBearerToken(bearerToken),
+            email = emailDto.email
+        ))
     }
 
     @DeleteMapping
     @ResponseStatus(NO_CONTENT)
     fun deleteUser(@RequestHeader(AUTHORIZATION) bearerToken: String) {
-        println("success")
+        userService.delete(id = getUserIdFromBearerToken(bearerToken))
     }
 
 }

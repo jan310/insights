@@ -1,14 +1,16 @@
 CREATE TABLE USERS
 (
-    ID          BIGSERIAL       PRIMARY KEY,
-    AUTH0_ID    VARCHAR(50)     UNIQUE NOT NULL,
-    EMAIL       VARCHAR(255)    UNIQUE NOT NULL
+    ID                  VARCHAR(50)     PRIMARY KEY,
+    EMAIL               VARCHAR(255)    UNIQUE NOT NULL
 );
 
 CREATE TABLE INSIGHTS
 (
-    ID          BIGSERIAL       PRIMARY KEY,
-    CONTENT     TEXT            NOT NULL,
-    SOURCE_TYPE VARCHAR(30)     NOT NULL,
-    SOURCE      JSONB           NOT NULL
+    ID                  BIGSERIAL       PRIMARY KEY,
+    USER_ID             VARCHAR(50)     NOT NULL REFERENCES USERS(ID) ON DELETE CASCADE,
+    CONTENT             TEXT            NOT NULL,
+    SOURCE_TYPE         VARCHAR(30)     NOT NULL,
+    SOURCE_INFORMATION  JSONB           NOT NULL
 );
+
+INSERT INTO USERS (ID, EMAIL) VALUES ('AsYz88yBOFC2LCbuym93br1V0rYf9jic@clients', 'jan310.ondra@gmail.com')

@@ -1,13 +1,13 @@
 package jan.ondra.insights.models
 
 data class User(
-    val id: Long,
-    val auth0Id: String,
+    val id: String,
     val email: String
 )
 
 data class Insight(
     val id: Long,
+    val userId: String,
     val content: String,
     val sourceType: SourceTypeEnum,
     val sourceInformation: SourceInformation
