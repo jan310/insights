@@ -6,8 +6,10 @@ import jan.ondra.insights.util.getUserIdFromBearerToken
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NO_CONTENT
+import org.springframework.http.HttpStatus.OK
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -23,22 +25,36 @@ class UserController(private val userService: UserService) {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    fun registerUser(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody emailDto: EmailDto) {
-        emailDto.validate()
-        userService.create(User(
-            id = getUserIdFromBearerToken(bearerToken),
-            email = emailDto.email
-        ))
+    fun registerUser(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody userDto: UserDto) {
+        userDto.validate()
+        userService.create(
+            User(
+                id = getUserIdFromBearerToken(bearerToken),
+                email = userDto.email,
+                notificationEnabled = userDto.notificationEnabled,
+                notificationFilterTags = userDto.notificationFilterTags
+            )
+        )
+    }
+
+    @GetMapping
+    @ResponseStatus(OK)
+    fun getUser(@RequestHeader(AUTHORIZATION) bearerToken: String): User {
+        return userService.get(id = getUserIdFromBearerToken(bearerToken))
     }
 
     @PatchMapping
     @ResponseStatus(NO_CONTENT)
-    fun updateUserEmail(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody emailDto: EmailDto) {
-        emailDto.validate()
-        userService.update(User(
-            id = getUserIdFromBearerToken(bearerToken),
-            email = emailDto.email
-        ))
+    fun updateUserEmail(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody userDto: UserDto) {
+        userDto.validate()
+        userService.update(
+            User(
+                id = getUserIdFromBearerToken(bearerToken),
+                email = userDto.email,
+                notificationEnabled = userDto.notificationEnabled,
+                notificationFilterTags = userDto.notificationFilterTags
+            )
+        )
     }
 
     @DeleteMapping

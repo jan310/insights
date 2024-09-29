@@ -8,6 +8,9 @@ import jan.ondra.insights.persistence.UserRepository
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.stereotype.Service
 
+private const val DUPLICATE_EMAIL_VIOLATION = "duplicate key value violates unique constraint \"users_email_key\""
+private const val DUPLICATE_ID_VIOLATION = "duplicate key value violates unique constraint \"users_pkey\""
+
 @Service
 class UserService(private val userRepository: UserRepository) {
 
@@ -16,18 +19,10 @@ class UserService(private val userRepository: UserRepository) {
             userRepository.create(user)
         } catch (duplicateKeyException: DuplicateKeyException) {
             duplicateKeyException.message?.let { message ->
-                throw if (message.contains("duplicate key value violates unique constraint \"users_email_key\"")) {
-                    EmailAlreadyExistsException(
-                        clientInfo = "The email already exists",
-                        serverLog = "A user tried to register using an email address that already exists",
-                        cause = duplicateKeyException
-                    )
-                } else if (message.contains("duplicate key value violates unique constraint \"users_pkey\"")) {
-                    UserAlreadyRegisteredException(
-                        clientInfo = "Registration failed",
-                        serverLog = "A registered user tried to register again",
-                        cause = duplicateKeyException
-                    )
+                throw if (message.contains(DUPLICATE_EMAIL_VIOLATION)) {
+                    EmailAlreadyExistsException(cause = duplicateKeyException)
+                } else if (message.contains(DUPLICATE_ID_VIOLATION)) {
+                    UserAlreadyRegisteredException(cause = duplicateKeyException)
                 } else {
                     duplicateKeyException
                 }
@@ -35,29 +30,23 @@ class UserService(private val userRepository: UserRepository) {
         }
     }
 
+    fun get(id: String): User {
+        return userRepository.get(id) ?: throw UserNotRegisteredException()
+    }
+
     fun update(user: User) {
         try {
             if (userRepository.update(user) == 0) {
-                throw UserNotRegisteredException(
-                    clientInfo = "User is not registered",
-                    serverLog = "An unregistered user tried to change its email address",
-                )
+                throw UserNotRegisteredException()
             }
         } catch (duplicateKeyException: DuplicateKeyException) {
-            throw EmailAlreadyExistsException(
-                clientInfo = "The email already exists",
-                serverLog = "A user tried to change its email address to an address that already exists",
-                cause = duplicateKeyException
-            )
+            throw EmailAlreadyExistsException(cause = duplicateKeyException)
         }
     }
 
     fun delete(id: String) {
         if (userRepository.delete(id) == 0) {
-            throw UserNotRegisteredException(
-                clientInfo = "User is not registered",
-                serverLog = "An unregistered user tried to delete its non-existent account",
-            )
+            throw UserNotRegisteredException()
         }
     }
 
