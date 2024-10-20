@@ -13,24 +13,25 @@ class GlobalExceptionHandler {
 
     private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
-    private fun constructLogMessage(
-        userId: String,
-        requestMethod: String,
-        requestPath: String,
-        serverLog: String
-    ) = "Request failed [userID: '$userId' | endpoint: '$requestMethod $requestPath' | cause: '$serverLog']"
-
     @ExceptionHandler(InsightsException::class)
     fun handleInsightsException(ex: InsightsException, request: HttpServletRequest): ResponseEntity<String> {
         logger.makeLoggingEventBuilder(ex.logLevel).log(
             constructLogMessage(
+                exception = ex::class.simpleName!!,
                 userId = getUserIdFromBearerToken(request.getHeader(AUTHORIZATION)),
                 requestMethod = request.method,
                 requestPath = request.requestURI,
                 serverLog = ex.serverLog
-            ),
-            ex.cause
+            )
         )
         return ResponseEntity(ex.clientInfo, ex.httpStatusCode)
     }
+
+    private fun constructLogMessage(
+        exception: String,
+        userId: String,
+        requestMethod: String,
+        requestPath: String,
+        serverLog: String
+    ) = "Request failed: $exception [userID: '$userId' | endpoint: '$requestMethod $requestPath' | cause: '$serverLog']"
 }

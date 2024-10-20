@@ -13,7 +13,7 @@ class ValidatorsTest {
     @Nested
     inner class ValidateUserDto {
 
-        val userDto = UserDto(
+        private val userDto = UserDto(
             email = "",
             notificationEnabled = true,
             notificationFilterTags = emptyList()

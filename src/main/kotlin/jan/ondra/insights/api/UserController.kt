@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus.OK
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -43,9 +43,9 @@ class UserController(private val userService: UserService) {
         return userService.get(id = getUserIdFromBearerToken(bearerToken))
     }
 
-    @PatchMapping
+    @PutMapping
     @ResponseStatus(NO_CONTENT)
-    fun updateUserEmail(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody userDto: UserDto) {
+    fun updateUser(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody userDto: UserDto) {
         userDto.validate()
         userService.update(
             User(

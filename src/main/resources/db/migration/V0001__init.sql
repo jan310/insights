@@ -1,11 +1,14 @@
-CREATE TYPE FILTERTAG AS ENUM
-(
-    'PERSONAL_DEVELOPMENT',
-    'WEALTH_CREATION'
-);
-CREATE CAST (VARCHAR AS FILTERTAG) WITH INOUT AS IMPLICIT;
+DO $$ BEGIN
+    CREATE TYPE FILTERTAG AS ENUM
+    (
+        'PERSONAL_DEVELOPMENT',
+        'WEALTH_CREATION'
+    );
+EXCEPTION
+    WHEN DUPLICATE_OBJECT THEN NULL;
+END $$;
 
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     id                          VARCHAR(64)     PRIMARY KEY,
     email                       VARCHAR(320)    UNIQUE NOT NULL,
@@ -13,7 +16,7 @@ CREATE TABLE users
     notification_filter_tags    FILTERTAG[]     NOT NULL
 );
 
-CREATE TABLE sources
+CREATE TABLE IF NOT EXISTS sources
 (
     id                          BIGSERIAL       PRIMARY KEY,
     user_id                     VARCHAR(64)     NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -21,20 +24,18 @@ CREATE TABLE sources
     description                 VARCHAR(300),
     isbn13                      CHAR(13)
 );
-CREATE INDEX ON sources(user_id);
+CREATE INDEX IF NOT EXISTS idx_sources_user_id ON sources(user_id);
 
-CREATE TABLE insights
+CREATE TABLE IF NOT EXISTS insights
 (
     id                          BIGSERIAL       PRIMARY KEY,
+    user_id                     VARCHAR(64)     NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     source_id                   BIGINT          REFERENCES sources(id) ON DELETE CASCADE,
     last_modified_date          DATE            NOT NULL,
     filter_tags                 FILTERTAG[]     NOT NULL,
-    note                        VARCHAR(1000),
-    quote                       VARCHAR(1000),
-    CHECK (note IS NOT NULL OR quote IS NOT NULL)
+    note                        VARCHAR(1000)   NOT NULL,
+    quote                       VARCHAR(1000)
 );
-CREATE INDEX ON insights(source_id);
-CREATE INDEX ON insights USING GIN(filter_tags);
-
-INSERT INTO users (id, email, notification_enabled, notification_filter_tags)
-VALUES ('AsYz88yBOFC2LCbuym93br1V0rYf9jic@clients', 'jan310.ondra@gmail.com', true, ARRAY[]::FILTERTAG[]);
+CREATE INDEX IF NOT EXISTS idx_insights_user_id ON insights(user_id);
+CREATE INDEX IF NOT EXISTS idx_insights_source_id ON insights(source_id);
+CREATE INDEX IF NOT EXISTS idx_insights_filter_tags ON insights USING GIN(filter_tags);
