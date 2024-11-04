@@ -9,3 +9,15 @@ services:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=insights
+
+#  insights:
+#    image: jan310/insights:0.1
+#    container_name: insights
+#    ports:
+#      - 8080:8080
+#    environment:
+#      - DB_HOST=postgres
+#      - DB_PORT=5432
+#      - DB_USER=user
+#      - DB_PASSWORD=password
+#      - DB_NAME=insights
