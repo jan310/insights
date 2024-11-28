@@ -31,7 +31,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
                 :id,
                 :email,
                 :notification_enabled,
-                ARRAY[:notification_filter_tags]::FILTERTAG[]
+                ARRAY[:notification_filter_tags]::VARCHAR[]
             );
         """.trimIndent()
 
@@ -72,7 +72,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
             SET
                 email = :email,
                 notification_enabled = :notification_enabled,
-                notification_filter_tags = ARRAY[:notification_filter_tags]::FILTERTAG[]
+                notification_filter_tags = ARRAY[:notification_filter_tags]::VARCHAR[]
             WHERE
                 id = :id;
         """.trimIndent()

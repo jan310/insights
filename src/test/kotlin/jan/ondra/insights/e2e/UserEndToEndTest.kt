@@ -47,7 +47,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
                 INSERT INTO users
                     (id, email, notification_enabled, notification_filter_tags)
                 VALUES
-                    ('$USER_1_ID', '$USER_1_EMAIL', true, ARRAY['PERSONAL_DEVELOPMENT']::FILTERTAG[]);
+                    ('$USER_1_ID', '$USER_1_EMAIL', true, ARRAY['PERSONAL_DEVELOPMENT']::VARCHAR[]);
             """.trimIndent()
         )
     }

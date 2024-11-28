@@ -44,8 +44,8 @@ class UserRepositoryTest(
                 INSERT INTO users
                     (id, email, notification_enabled, notification_filter_tags)
                 VALUES
-                    ('$USER_1_ID', '$USER_1_EMAIL', true, ARRAY['PERSONAL_DEVELOPMENT']::FILTERTAG[]),
-                    ('$USER_2_ID', '$USER_2_EMAIL', true, ARRAY[]::FILTERTAG[]);
+                    ('$USER_1_ID', '$USER_1_EMAIL', true, ARRAY['PERSONAL_DEVELOPMENT']::VARCHAR[]),
+                    ('$USER_2_ID', '$USER_2_EMAIL', true, ARRAY[]::VARCHAR[]);
             """.trimIndent()
         )
     }

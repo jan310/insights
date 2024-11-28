@@ -1,19 +1,9 @@
-DO $$ BEGIN
-    CREATE TYPE FILTERTAG AS ENUM
-    (
-        'PERSONAL_DEVELOPMENT',
-        'WEALTH_CREATION'
-    );
-EXCEPTION
-    WHEN DUPLICATE_OBJECT THEN NULL;
-END $$;
-
 CREATE TABLE IF NOT EXISTS users
 (
     id                          VARCHAR(64)     PRIMARY KEY,
     email                       VARCHAR(320)    UNIQUE NOT NULL,
     notification_enabled        BOOLEAN         NOT NULL,
-    notification_filter_tags    FILTERTAG[]     NOT NULL
+    notification_filter_tags    VARCHAR(100)[]  NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS sources
@@ -32,7 +22,7 @@ CREATE TABLE IF NOT EXISTS insights
     user_id                     VARCHAR(64)     NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     source_id                   BIGINT          REFERENCES sources(id) ON DELETE CASCADE,
     last_modified_date          DATE            NOT NULL,
-    filter_tags                 FILTERTAG[]     NOT NULL,
+    filter_tags                 VARCHAR(100)[]  NOT NULL,
     note                        VARCHAR(1000)   NOT NULL,
     quote                       VARCHAR(1000)
 );
