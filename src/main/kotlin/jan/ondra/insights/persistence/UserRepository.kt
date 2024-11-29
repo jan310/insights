@@ -17,7 +17,7 @@ private const val DUPLICATE_ID_VIOLATION = "duplicate key value violates unique 
 @Repository
 class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
 
-    fun create(user: User) {
+    fun createUser(user: User) {
         val sqlStatement = """
             INSERT INTO users
             (
@@ -57,7 +57,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
         }
     }
 
-    fun get(id: String): User {
+    fun getUser(id: String): User {
         val sqlStatement = "SELECT * FROM users WHERE id = :id;"
 
         val parameters = mapOf("id" to id)
@@ -66,7 +66,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
             ?: throw UserNotRegisteredException()
     }
 
-    fun update(user: User) {
+    fun updateUser(user: User) {
         val sqlStatement = """
             UPDATE users
             SET
@@ -93,7 +93,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
         }
     }
 
-    fun delete(id: String) {
+    fun deleteUser(id: String) {
         val sqlStatement = "DELETE FROM users WHERE id = :id;"
 
         val parameters = mapOf("id" to id)

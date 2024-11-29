@@ -1,7 +1,6 @@
 package jan.ondra.insights.api
 
 import jan.ondra.insights.models.FilterTag
-import java.time.LocalDate
 
 data class UserDto(
     val email: String,
@@ -16,8 +15,7 @@ data class SourceDto(
 )
 
 data class InsightDto(
-    val sourceId: Long,
-    val lastModifiedDate: LocalDate?,
-    val content: String,
     val filterTags: List<FilterTag>,
+    val note: String,
+    val quote: String?
 )

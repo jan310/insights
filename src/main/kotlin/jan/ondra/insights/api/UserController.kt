@@ -25,9 +25,9 @@ class UserController(private val userService: UserService) {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    fun registerUser(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody userDto: UserDto) {
+    fun createUser(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody userDto: UserDto) {
         userDto.validate()
-        userService.create(
+        userService.createUser(
             User(
                 id = getUserIdFromBearerToken(bearerToken),
                 email = userDto.email,
@@ -40,14 +40,14 @@ class UserController(private val userService: UserService) {
     @GetMapping
     @ResponseStatus(OK)
     fun getUser(@RequestHeader(AUTHORIZATION) bearerToken: String): User {
-        return userService.get(id = getUserIdFromBearerToken(bearerToken))
+        return userService.getUser(id = getUserIdFromBearerToken(bearerToken))
     }
 
     @PutMapping
     @ResponseStatus(NO_CONTENT)
     fun updateUser(@RequestHeader(AUTHORIZATION) bearerToken: String, @RequestBody userDto: UserDto) {
         userDto.validate()
-        userService.update(
+        userService.updateUser(
             User(
                 id = getUserIdFromBearerToken(bearerToken),
                 email = userDto.email,
@@ -60,7 +60,7 @@ class UserController(private val userService: UserService) {
     @DeleteMapping
     @ResponseStatus(NO_CONTENT)
     fun deleteUser(@RequestHeader(AUTHORIZATION) bearerToken: String) {
-        userService.delete(id = getUserIdFromBearerToken(bearerToken))
+        userService.deleteUser(id = getUserIdFromBearerToken(bearerToken))
     }
 
 }

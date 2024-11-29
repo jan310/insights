@@ -10,7 +10,7 @@ data class User(
 )
 
 data class Source(
-    val id: Long,
+    val id: Long?,
     val userId: String,
     val name: String,
     val description: String?,
@@ -18,7 +18,8 @@ data class Source(
 )
 
 data class Insight(
-    val id: Long,
+    val id: Long?,
+    val userId: String,
     val sourceId: Long,
     val lastModifiedDate: LocalDate,
     val content: String,

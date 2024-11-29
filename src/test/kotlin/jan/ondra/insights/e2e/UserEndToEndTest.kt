@@ -53,7 +53,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
     }
 
     @Test
-    fun `register user`() {
+    fun `create user`() {
         given()
             .header(AUTHORIZATION, USER_2_BEARER_TOKEN)
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)

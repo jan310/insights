@@ -40,11 +40,11 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
     private lateinit var userService: UserService
 
     @Nested
-    inner class RegisterUser {
+    inner class CreateUser {
 
         @Test
         fun `should succeed`() {
-            justRun { userService.create(any()) }
+            justRun { userService.createUser(any()) }
 
             mockMvc
                 .perform(post("/api/v1/users")
@@ -68,7 +68,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
         @Test
         fun `should fail when user ID already exists`() {
-            every { userService.create(any()) } throws UserAlreadyRegisteredException(DuplicateKeyException(null))
+            every { userService.createUser(any()) } throws UserAlreadyRegisteredException(DuplicateKeyException(null))
 
             mockMvc
                 .perform(post("/api/v1/users")
@@ -92,7 +92,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
         @Test
         fun `should fail when email already exists`() {
-            every { userService.create(any()) } throws EmailAlreadyExistsException(DuplicateKeyException(null))
+            every { userService.createUser(any()) } throws EmailAlreadyExistsException(DuplicateKeyException(null))
 
             mockMvc
                 .perform(post("/api/v1/users")
@@ -128,7 +128,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                 notificationFilterTags = listOf()
             )
 
-            every { userService.get(any()) } returns user
+            every { userService.getUser(any()) } returns user
 
             mockMvc
                 .perform(get("/api/v1/users")
@@ -142,7 +142,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
         @Test
         fun `should fail when user does not exist`() {
-            every { userService.get(any()) } throws UserNotRegisteredException()
+            every { userService.getUser(any()) } throws UserNotRegisteredException()
 
             mockMvc
                 .perform(get("/api/v1/users")
@@ -161,7 +161,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
         @Test
         fun `should succeed`() {
-            justRun { userService.update(any()) }
+            justRun { userService.updateUser(any()) }
 
             mockMvc
                 .perform(put("/api/v1/users")
@@ -185,7 +185,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
         @Test
         fun `should fail when user does not exist`() {
-            every { userService.update(any()) } throws UserNotRegisteredException()
+            every { userService.updateUser(any()) } throws UserNotRegisteredException()
 
             mockMvc
                 .perform(put("/api/v1/users")
@@ -209,7 +209,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
         @Test
         fun `should fail when email already exists`() {
-            every { userService.update(any()) } throws EmailAlreadyExistsException(DuplicateKeyException(null))
+            every { userService.updateUser(any()) } throws EmailAlreadyExistsException(DuplicateKeyException(null))
 
             mockMvc
                 .perform(put("/api/v1/users")
@@ -238,7 +238,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
         @Test
         fun `should succeed`() {
-            justRun { userService.delete(any()) }
+            justRun { userService.deleteUser(any()) }
 
             mockMvc
                 .perform(delete("/api/v1/users")
@@ -252,7 +252,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
         @Test
         fun `should fail when user does not exist`() {
-            every { userService.delete(any()) } throws UserNotRegisteredException()
+            every { userService.deleteUser(any()) } throws UserNotRegisteredException()
 
             mockMvc
                 .perform(delete("/api/v1/users")

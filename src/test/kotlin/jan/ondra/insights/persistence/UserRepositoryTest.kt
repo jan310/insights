@@ -51,7 +51,7 @@ class UserRepositoryTest(
     }
 
     @Nested
-    inner class Create {
+    inner class CreateUser {
 
         @Test
         fun `should create user`() {
@@ -62,7 +62,7 @@ class UserRepositoryTest(
                 notificationFilterTags = listOf(PERSONAL_DEVELOPMENT, WEALTH_CREATION),
             )
 
-            userRepository.create(user)
+            userRepository.createUser(user)
 
             assertThat(getSavedUser(user.id)).isEqualTo(user)
         }
@@ -76,7 +76,7 @@ class UserRepositoryTest(
                 notificationFilterTags = listOf(),
             )
 
-            userRepository.create(user)
+            userRepository.createUser(user)
 
             assertThat(getSavedUser(user.id)).isEqualTo(user)
         }
@@ -90,7 +90,7 @@ class UserRepositoryTest(
                 notificationFilterTags = listOf(),
             )
 
-            assertThatThrownBy { userRepository.create(user) }
+            assertThatThrownBy { userRepository.createUser(user) }
                 .isInstanceOf(UserAlreadyRegisteredException::class.java)
                 .hasCauseInstanceOf(DuplicateKeyException::class.java)
                 .cause().message().contains("duplicate key value violates unique constraint \"users_pkey\"")
@@ -105,7 +105,7 @@ class UserRepositoryTest(
                 notificationFilterTags = listOf(),
             )
 
-            assertThatThrownBy { userRepository.create(user) }
+            assertThatThrownBy { userRepository.createUser(user) }
                 .isInstanceOf(EmailAlreadyExistsException::class.java)
                 .hasCauseInstanceOf(DuplicateKeyException::class.java)
                 .cause().message().contains("duplicate key value violates unique constraint \"users_email_key\"")
@@ -114,11 +114,11 @@ class UserRepositoryTest(
     }
 
     @Nested
-    inner class Get {
+    inner class GetUser {
 
         @Test
         fun `should return user`() {
-            assertThat(userRepository.get(USER_1_ID)).isEqualTo(
+            assertThat(userRepository.getUser(USER_1_ID)).isEqualTo(
                 User(
                     id = USER_1_ID,
                     email = USER_1_EMAIL,
@@ -130,13 +130,14 @@ class UserRepositoryTest(
 
         @Test
         fun `should fail when user does not exist`() {
-            assertThatThrownBy { userRepository.get(USER_3_ID) }.isInstanceOf(UserNotRegisteredException::class.java)
+            assertThatThrownBy { userRepository.getUser(USER_3_ID) }
+                .isInstanceOf(UserNotRegisteredException::class.java)
         }
 
     }
 
     @Nested
-    inner class Update {
+    inner class UpdateUser {
 
         @Test
         fun `should update user`() {
@@ -147,7 +148,7 @@ class UserRepositoryTest(
                 notificationFilterTags = listOf(WEALTH_CREATION),
             )
 
-            userRepository.update(user)
+            userRepository.updateUser(user)
 
             assertThat(getSavedUser(user.id)).isEqualTo(user)
         }
@@ -161,7 +162,7 @@ class UserRepositoryTest(
                 notificationFilterTags = listOf(WEALTH_CREATION),
             )
 
-            assertThatThrownBy { userRepository.update(user) }.isInstanceOf(UserNotRegisteredException::class.java)
+            assertThatThrownBy { userRepository.updateUser(user) }.isInstanceOf(UserNotRegisteredException::class.java)
         }
 
         @Test
@@ -173,7 +174,7 @@ class UserRepositoryTest(
                 notificationFilterTags = listOf(WEALTH_CREATION),
             )
 
-            assertThatThrownBy { userRepository.update(user) }
+            assertThatThrownBy { userRepository.updateUser(user) }
                 .isInstanceOf(EmailAlreadyExistsException::class.java)
                 .hasCauseInstanceOf(DuplicateKeyException::class.java)
                 .cause().message().contains("duplicate key value violates unique constraint \"users_email_key\"")
@@ -182,18 +183,19 @@ class UserRepositoryTest(
     }
 
     @Nested
-    inner class Delete {
+    inner class DeleteUser {
 
         @Test
         fun `should delete user`() {
-            userRepository.delete(USER_2_ID)
+            userRepository.deleteUser(USER_2_ID)
 
             assertThat(getSavedUser(USER_2_ID)).isNull()
         }
 
         @Test
         fun `should fail when user does not exist`() {
-            assertThatThrownBy { userRepository.delete(USER_3_ID) }.isInstanceOf(UserNotRegisteredException::class.java)
+            assertThatThrownBy { userRepository.deleteUser(USER_3_ID) }
+                .isInstanceOf(UserNotRegisteredException::class.java)
         }
 
     }
