@@ -1,22 +1,28 @@
 package jan.ondra.insights.api
 
 import jan.ondra.insights.exception.InvalidRequestDataException
-
-private const val EMAIL_REGEX = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x" +
-        "08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0" +
-        "-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]" +
-        "?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x" +
-        "21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])"
-
-private const val MAX_SOURCE_NAME_LENGTH = 100
-private const val MAX_SOURCE_DESCRIPTION_LENGTH = 300
-private const val ISBN_13_LENGTH = 13
-
-private const val MAX_INSIGHT_NOTE_LENGTH = 1000
-private const val MAX_INSIGHT_QUOTE_LENGTH = 1000
+import jan.ondra.insights.api.ValidationConstants.ISBN_13_LENGTH
+import jan.ondra.insights.api.ValidationConstants.MAX_INSIGHT_NOTE_LENGTH
+import jan.ondra.insights.api.ValidationConstants.MAX_INSIGHT_QUOTE_LENGTH
+import jan.ondra.insights.api.ValidationConstants.MAX_SOURCE_DESCRIPTION_LENGTH
+import jan.ondra.insights.api.ValidationConstants.MAX_SOURCE_NAME_LENGTH
 
 fun UserDto.validate() {
-    if (!email.matches(Regex(EMAIL_REGEX))) {
+    @Suppress("MaxLineLength")
+    val emailRegex = Regex(
+        """(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\u0001-\u0008\u000b\u000c\u000e-\u001f\u0021\u0023-\u005b\u005d-\u007f]|\\[\u0001-\u0009\u000b\u000c\u000e-\u007f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\u0001-\u0008\u000b\u000c\u000e-\u001f\u0021-\u005a\u0053-\u007f]|\\[\u0001-\u0009\u000b\u000c\u000e-\u007f])+)])"""
+    )
+
+    if (!email.matches(emailRegex)) {
+        throw InvalidRequestDataException()
+    }
+}
+
+fun SourceDto.validate() {
+    if (name.length > MAX_SOURCE_NAME_LENGTH ||
+        (description?.length ?: 0) > MAX_SOURCE_DESCRIPTION_LENGTH ||
+        (isbn13?.length ?: ISBN_13_LENGTH) != ISBN_13_LENGTH
+        ) {
         throw InvalidRequestDataException()
     }
 }

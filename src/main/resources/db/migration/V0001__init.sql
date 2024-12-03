@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS sources
     user_id                     VARCHAR(64)     NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     name                        VARCHAR(100)    NOT NULL,
     description                 VARCHAR(300),
-    isbn13                      CHAR(13)
+    isbn_13                     CHAR(13)
 );
 CREATE INDEX IF NOT EXISTS idx_sources_user_id ON sources(user_id);
 

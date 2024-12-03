@@ -1,21 +1,18 @@
 package jan.ondra.insights.e2e
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.restassured.RestAssured
 import io.restassured.RestAssured.given
-import jan.ondra.insights.api.UserDto
 import jan.ondra.insights.models.FilterTag.PERSONAL_DEVELOPMENT
 import jan.ondra.insights.models.FilterTag.WEALTH_CREATION
 import jan.ondra.insights.models.User
 import jan.ondra.insights.persistence.UserRowMapper
 import jan.ondra.insights.util.USER_1_BEARER_TOKEN
-import jan.ondra.insights.util.USER_1_EMAIL
 import jan.ondra.insights.util.USER_1_ID
 import jan.ondra.insights.util.USER_2_BEARER_TOKEN
-import jan.ondra.insights.util.USER_2_EMAIL
 import jan.ondra.insights.util.USER_2_ID
 import org.assertj.core.api.Assertions.assertThat
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.hasItem
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,7 +44,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
                 INSERT INTO users
                     (id, email, notification_enabled, notification_filter_tags)
                 VALUES
-                    ('$USER_1_ID', '$USER_1_EMAIL', true, ARRAY['PERSONAL_DEVELOPMENT']::VARCHAR[]);
+                    ('$USER_1_ID', 'user1@email.com', true, ARRAY['PERSONAL_DEVELOPMENT']::VARCHAR[]);
             """.trimIndent()
         )
     }
@@ -58,13 +55,13 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
             .header(AUTHORIZATION, USER_2_BEARER_TOKEN)
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .body(
-                ObjectMapper().writeValueAsString(
-                    UserDto(
-                        email = USER_2_EMAIL,
-                        notificationEnabled = false,
-                        notificationFilterTags = listOf(PERSONAL_DEVELOPMENT, WEALTH_CREATION),
-                    )
-                )
+                """
+                    {
+                        "email": "user2@email.com",
+                        "notificationEnabled": false,
+                        "notificationFilterTags": ["PERSONAL_DEVELOPMENT", "WEALTH_CREATION"]
+                    }
+                """.trimIndent()
             )
             .`when`()
             .post("/api/v1/users")
@@ -76,7 +73,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
         assertThat(getSavedUser(USER_2_ID)).isEqualTo(
             User(
                 id = USER_2_ID,
-                email = USER_2_EMAIL,
+                email = "user2@email.com",
                 notificationEnabled = false,
                 notificationFilterTags = listOf(PERSONAL_DEVELOPMENT, WEALTH_CREATION),
             )
@@ -92,18 +89,10 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
             .then()
             .assertThat()
             .statusCode(OK.value())
-            .body(
-                equalTo(
-                    ObjectMapper().writeValueAsString(
-                        User(
-                            id = USER_1_ID,
-                            email = USER_1_EMAIL,
-                            notificationEnabled = true,
-                            notificationFilterTags = listOf(PERSONAL_DEVELOPMENT)
-                        )
-                    )
-                )
-            )
+            .body("id", equalTo(USER_1_ID))
+            .body("email", equalTo("user1@email.com"))
+            .body("notificationEnabled", equalTo(true))
+            .body("notificationFilterTags", hasItem("PERSONAL_DEVELOPMENT"))
     }
 
     @Test
@@ -112,13 +101,13 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
             .header(AUTHORIZATION, USER_1_BEARER_TOKEN)
             .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .body(
-                ObjectMapper().writeValueAsString(
-                    UserDto(
-                        email = "new@email.com",
-                        notificationEnabled = true,
-                        notificationFilterTags = listOf(WEALTH_CREATION),
-                    )
-                )
+                """
+                    {
+                        "email": "new@email.com",
+                        "notificationEnabled": true,
+                        "notificationFilterTags": ["WEALTH_CREATION"]
+                    }
+                """.trimIndent()
             )
             .`when`()
             .put("/api/v1/users")
@@ -151,7 +140,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
     }
 
     private fun getSavedUser(id: String): User? {
-        return jdbcTemplate.query("SELECT * FROM users WHERE id = '${id}'", UserRowMapper()).firstOrNull()
+        return jdbcTemplate.query("SELECT * FROM users WHERE id = '$id'", UserRowMapper()).firstOrNull()
     }
 
 }

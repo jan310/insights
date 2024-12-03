@@ -2,6 +2,14 @@ package jan.ondra.insights.api
 
 import jan.ondra.insights.models.FilterTag
 
+data class IdDto(
+    val id: Long
+)
+
+data class ErrorDto(
+    val error: String
+)
+
 data class UserDto(
     val email: String,
     val notificationEnabled: Boolean,

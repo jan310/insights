@@ -1,6 +1,7 @@
 package jan.ondra.insights.exception
 
 import jakarta.servlet.http.HttpServletRequest
+import jan.ondra.insights.api.ErrorDto
 import jan.ondra.insights.util.getUserIdFromBearerToken
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders.AUTHORIZATION
@@ -14,7 +15,7 @@ class GlobalExceptionHandler {
     private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
     @ExceptionHandler(InsightsException::class)
-    fun handleInsightsException(ex: InsightsException, request: HttpServletRequest): ResponseEntity<String> {
+    fun handleInsightsException(ex: InsightsException, request: HttpServletRequest): ResponseEntity<ErrorDto> {
         logger.makeLoggingEventBuilder(ex.logLevel).log(
             constructLogMessage(
                 exception = ex::class.simpleName!!,
@@ -24,7 +25,7 @@ class GlobalExceptionHandler {
                 serverLog = ex.serverLog
             )
         )
-        return ResponseEntity(ex.clientInfo, ex.httpStatusCode)
+        return ResponseEntity(ErrorDto(ex.clientInfo), ex.httpStatusCode)
     }
 
     private fun constructLogMessage(

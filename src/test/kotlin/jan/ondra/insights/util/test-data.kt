@@ -6,12 +6,6 @@ const val USER_2_ID = "2"
 
 const val USER_3_ID = "3"
 
-const val USER_1_EMAIL = "user1@email.com"
-
-const val USER_2_EMAIL = "user2@email.com"
-
-const val USER_3_EMAIL = "user3@email.com"
-
 const val USER_1_BEARER_TOKEN = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6IkpvaG4gRG9lIiwi" +
         "aWF0IjoxNTE2MjM5MDIyfQ.ZU43TYZENiuLdKJPpd-hnkFhRkpLPurixsKr-8m-kBc"
 
