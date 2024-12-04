@@ -64,7 +64,7 @@ class SourceRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
                 isbn_13 = :isbn_13
             WHERE
                 id = :id AND
-                user_id = :user_id
+                user_id = :user_id;
         """.trimIndent()
 
         val parameters = mapOf(

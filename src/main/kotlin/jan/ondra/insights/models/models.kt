@@ -20,10 +20,11 @@ data class Source(
 data class Insight(
     val id: Long? = null,
     val userId: String,
-    val sourceId: Long,
+    val sourceId: Long?,
     val lastModifiedDate: LocalDate,
-    val content: String,
     val filterTags: List<FilterTag>,
+    val note: String,
+    val quote: String?
 )
 
 enum class FilterTag {

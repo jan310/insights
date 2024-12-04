@@ -25,6 +25,7 @@ class SourceRepositoryTest(
     @Autowired private val sourceRepository: SourceRepository,
     @Autowired private val jdbcTemplate: JdbcTemplate
 ) {
+
     private lateinit var source1: Source
     private lateinit var source2: Source
 
@@ -32,7 +33,7 @@ class SourceRepositoryTest(
     fun setup() {
         jdbcTemplate.update(
             """
-                DELETE FROM users;
+                DELETE FROM users; 
                 
                 INSERT INTO users
                     (id, email, notification_enabled, notification_filter_tags)
@@ -50,7 +51,6 @@ class SourceRepositoryTest(
         )
 
         val sources = jdbcTemplate.query("SELECT * FROM sources", SourceRowMapper()).apply { sortBy { it.id } }
-
         source1 = sources[0]
         source2 = sources[1]
     }
@@ -95,7 +95,7 @@ class SourceRepositoryTest(
     inner class GetSources {
 
         @Test
-        fun `should get all sources from the specified user`() {
+        fun `should get all sources from the user`() {
             assertThat(sourceRepository.getSources("1")).containsExactlyInAnyOrder(source1, source2)
         }
 
@@ -105,7 +105,7 @@ class SourceRepositoryTest(
     inner class UpdateSource {
 
         @Test
-        fun `should update the specified source`() {
+        fun `should update the source`() {
             val updatedSource = Source(
                 id = source1.id,
                 userId = "1",
@@ -155,7 +155,7 @@ class SourceRepositoryTest(
     inner class DeleteSource {
 
         @Test
-        fun `should delete the specified source`() {
+        fun `should delete the source`() {
             sourceRepository.deleteSource(source1.id!!, source1.userId)
 
             assertThat(getSavedSource(source1.id!!)).isNull()
