@@ -23,6 +23,7 @@ data class SourceDto(
 )
 
 data class InsightDto(
+    val sourceId: Long?,
     val filterTags: List<FilterTag>,
     val note: String,
     val quote: String?

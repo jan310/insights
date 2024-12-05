@@ -26,3 +26,9 @@ fun SourceDto.validate() {
         throw InvalidRequestDataException()
     }
 }
+
+fun InsightDto.validate() {
+    if (note.length > MAX_INSIGHT_NOTE_LENGTH || (quote?.length ?: 0) > MAX_INSIGHT_QUOTE_LENGTH) {
+        throw InvalidRequestDataException()
+    }
+}

@@ -101,14 +101,14 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                             [
                               {
                                 "id": 1,
-                                "userId":"$USER_1_ID",
+                                "userId": "$USER_1_ID",
                                 "name": "name1",
                                 "description": null,
                                 "isbn13": "9781982160272"
                               },
                               {
                                 "id": 2,
-                                "userId":"$USER_1_ID",
+                                "userId": "$USER_1_ID",
                                 "name": "name2",
                                 "description":"description2",
                                 "isbn13": null               
