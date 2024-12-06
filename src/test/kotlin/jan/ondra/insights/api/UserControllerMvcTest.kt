@@ -7,13 +7,17 @@ import jan.ondra.insights.business.UserService
 import jan.ondra.insights.exception.EmailAlreadyExistsException
 import jan.ondra.insights.exception.UserAlreadyRegisteredException
 import jan.ondra.insights.exception.UserNotRegisteredException
+import jan.ondra.insights.models.FilterTag.PERSONAL_DEVELOPMENT
+import jan.ondra.insights.models.FilterTag.WEALTH_CREATION
 import jan.ondra.insights.models.User
 import jan.ondra.insights.util.USER_1_BEARER_TOKEN
 import jan.ondra.insights.util.USER_1_ID
+import jan.ondra.insights.util.andDocument
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.dao.DuplicateKeyException
@@ -31,6 +35,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @ActiveProfiles("test")
 @WebMvcTest(UserController::class)
 @AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs(outputDir = "build/generated-snippets/user")
 class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
     @MockkBean
@@ -62,6 +67,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isCreated,
                     content().string("")
                 )
+                .andDocument("create-user-success")
         }
 
         @Test
@@ -78,6 +84,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isConflict,
                     content().json("""{"error": "Registration failed"}""")
                 )
+                .andDocument("create-user-error_user-already-registered")
         }
 
         @Test
@@ -94,6 +101,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isConflict,
                     content().json("""{"error": "The email already exists"}""")
                 )
+                .andDocument("create-user-error_email-already-exists")
         }
 
     }
@@ -107,7 +115,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                 id = USER_1_ID,
                 email = "user1@email.com",
                 notificationEnabled = false,
-                notificationFilterTags = listOf()
+                notificationFilterTags = listOf(PERSONAL_DEVELOPMENT, WEALTH_CREATION)
             )
 
             mockMvc
@@ -122,11 +130,12 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                               "id": "$USER_1_ID",
                               "email": "user1@email.com",
                               "notificationEnabled": false,
-                              "notificationFilterTags": []
+                              "notificationFilterTags": ["PERSONAL_DEVELOPMENT", "WEALTH_CREATION"]
                             }
                         """.trimIndent()
                     )
                 )
+                .andDocument("get-user-success")
         }
 
         @Test
@@ -141,6 +150,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "User is not registered"}""")
                 )
+                .andDocument("get-user-error_user-not-registered")
         }
 
     }
@@ -171,6 +181,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNoContent,
                     content().string("")
                 )
+                .andDocument("update-user-success")
         }
 
         @Test
@@ -187,6 +198,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "User is not registered"}""")
                 )
+                .andDocument("update-user-error_user-not-registered")
         }
 
         @Test
@@ -203,6 +215,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isConflict,
                     content().json("""{"error": "The email already exists"}""")
                 )
+                .andDocument("update-user-error_email-already-exists")
         }
 
     }
@@ -222,6 +235,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNoContent,
                     content().string("")
                 )
+                .andDocument("delete-user-success")
         }
 
         @Test
@@ -236,6 +250,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "User is not registered"}""")
                 )
+                .andDocument("delete-user-error_user-not-registered")
         }
 
     }

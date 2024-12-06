@@ -1,0 +1,116 @@
+:toc: left
+
+= Daily Insights API Documentation
+
+:sectnums:
+
+== User API
+
+=== Create User
+==== Request
+include::{snippets}/user/create-user-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/user/create-user-success/http-response.adoc[]
+==== Response - Error (Email already exists)
+include::{snippets}/user/create-user-error_email-already-exists/http-response.adoc[]
+==== Response - Error (User already registered)
+include::{snippets}/user/create-user-error_user-already-registered/http-response.adoc[]
+
+=== Get User
+==== Request
+include::{snippets}/user/get-user-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/user/get-user-success/http-response.adoc[]
+==== Response - Error (User not registered)
+include::{snippets}/user/get-user-error_user-not-registered/http-response.adoc[]
+
+=== Update User
+==== Request
+include::{snippets}/user/update-user-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/user/update-user-success/http-response.adoc[]
+==== Response - Error (Email already exists)
+include::{snippets}/user/update-user-error_email-already-exists/http-response.adoc[]
+==== Response - Error (User not registered)
+include::{snippets}/user/update-user-error_user-not-registered/http-response.adoc[]
+
+=== Delete User
+==== Request
+include::{snippets}/user/delete-user-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/user/delete-user-success/http-response.adoc[]
+==== Response - Error (User not registered)
+include::{snippets}/user/delete-user-error_user-not-registered/http-response.adoc[]
+
+
+== Source API
+
+=== Create Source
+==== Request
+include::{snippets}/source/create-source-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/source/create-source-success/http-response.adoc[]
+==== Response - Error (User not registered)
+include::{snippets}/source/create-source-error_user-not-registered/http-response.adoc[]
+
+=== Get Sources
+==== Request
+include::{snippets}/source/get-sources-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/source/get-sources-success/http-response.adoc[]
+
+=== Update Source
+==== Request
+include::{snippets}/source/update-source-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/source/update-source-success/http-response.adoc[]
+==== Response - Error (Source not found)
+include::{snippets}/source/update-source-error_source-not-found/http-response.adoc[]
+
+=== Delete Source
+include::{snippets}/source/delete-source-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/source/delete-source-success/http-response.adoc[]
+==== Response - Error (Source not found)
+include::{snippets}/source/delete-source-error_source-not-found/http-response.adoc[]
+
+
+== Insight API
+
+=== Create Insight
+==== Request
+include::{snippets}/insight/create-insight-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/insight/create-insight-success/http-response.adoc[]
+==== Response - Error (User not registered)
+include::{snippets}/insight/create-insight-error_user-not-registered/http-response.adoc[]
+==== Response - Error (Source not found)
+include::{snippets}/insight/create-insight-error_source-not-found/http-response.adoc[]
+==== Response - Error (Source does not belong to user)
+include::{snippets}/insight/create-insight-error_source-does-not-belong-to-user/http-response.adoc[]
+
+=== Get Insights
+==== Request
+include::{snippets}/insight/get-insights-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/insight/get-insights-success/http-response.adoc[]
+
+=== Update Insight
+==== Request
+include::{snippets}/insight/update-insight-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/insight/update-insight-success/http-response.adoc[]
+==== Response - Error (Insight not found)
+include::{snippets}/insight/update-insight-error_insight-not-found/http-response.adoc[]
+==== Response - Error (Source not found)
+include::{snippets}/insight/update-insight-error_source-not-found/http-response.adoc[]
+==== Response - Error (Source does not belong to user)
+include::{snippets}/insight/update-insight-error_source-does-not-belong-to-user/http-response.adoc[]
+
+=== Delete Insight
+==== Request
+include::{snippets}/insight/delete-insight-success/http-request.adoc[]
+==== Response - Success
+include::{snippets}/insight/delete-insight-success/http-response.adoc[]
+==== Response - Error (Insight not found)
+include::{snippets}/insight/delete-insight-error_insight-not-found/http-response.adoc[]

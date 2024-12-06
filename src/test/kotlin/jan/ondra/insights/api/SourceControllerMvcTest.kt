@@ -9,10 +9,12 @@ import jan.ondra.insights.exception.UserNotRegisteredException
 import jan.ondra.insights.models.Source
 import jan.ondra.insights.util.USER_1_BEARER_TOKEN
 import jan.ondra.insights.util.USER_1_ID
+import jan.ondra.insights.util.andDocument
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.HttpHeaders.AUTHORIZATION
@@ -29,6 +31,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @ActiveProfiles("test")
 @WebMvcTest(SourceController::class)
 @AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs(outputDir = "build/generated-snippets/source")
 class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
 
     @MockkBean
@@ -41,7 +44,7 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
         private val requestBody = """
             {
               "name": "Principles for Dealing with the Changing World Order: Why Nations Succeed and Fail",
-              "description": null,
+              "description": "A book about principles for dealing with the changing world order.",
               "isbn13": "9781982160272"
             }
         """.trimIndent()
@@ -60,6 +63,7 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                     status().isCreated,
                     content().json("""{"id":1}""")
                 )
+                .andDocument("create-source-success")
         }
 
         @Test
@@ -76,6 +80,7 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "User is not registered"}""")
                 )
+                .andDocument("create-source-error_user-not-registered")
         }
 
     }
@@ -117,6 +122,7 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                         """.trimIndent()
                     )
                 )
+                .andDocument("get-sources-success")
         }
 
     }
@@ -147,6 +153,7 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                     status().isAccepted,
                     content().string("")
                 )
+                .andDocument("update-source-success")
         }
 
         @Test
@@ -163,6 +170,7 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "Source not found"}""")
                 )
+                .andDocument("update-source-error_source-not-found")
         }
 
     }
@@ -182,6 +190,7 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                     status().isNoContent,
                     content().string("")
                 )
+                .andDocument("delete-source-success")
         }
 
         @Test
@@ -196,6 +205,7 @@ class SourceControllerMvcTest(@Autowired val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "Source not found"}""")
                 )
+                .andDocument("delete-source-error_source-not-found")
         }
 
     }

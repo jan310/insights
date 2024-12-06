@@ -11,10 +11,12 @@ import jan.ondra.insights.exception.UserNotRegisteredException
 import jan.ondra.insights.models.Insight
 import jan.ondra.insights.util.USER_1_BEARER_TOKEN
 import jan.ondra.insights.util.USER_1_ID
+import jan.ondra.insights.util.andDocument
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.HttpHeaders.AUTHORIZATION
@@ -32,6 +34,7 @@ import java.time.LocalDate
 @ActiveProfiles("test")
 @WebMvcTest(InsightController::class)
 @AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureRestDocs(outputDir = "build/generated-snippets/insight")
 class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
 
     @MockkBean
@@ -45,7 +48,8 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
             {
               "sourceId": 1,
               "filterTags": [],
-              "note": "The money is always right!"
+              "note": "The money is always right!",
+              "quote": null
             }
         """.trimIndent()
 
@@ -64,6 +68,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isCreated,
                     content().json("""{"id":1}""")
                 )
+                .andDocument("create-insight-success")
         }
 
         @Test
@@ -80,6 +85,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "User is not registered"}""")
                 )
+                .andDocument("create-insight-error_user-not-registered")
         }
 
         @Test
@@ -96,6 +102,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "Source not found"}""")
                 )
+                .andDocument("create-insight-error_source-not-found")
         }
 
         @Test
@@ -112,6 +119,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "Source not found"}""")
                 )
+                .andDocument("create-insight-error_source-does-not-belong-to-user")
         }
 
     }
@@ -172,6 +180,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                         """.trimIndent()
                     )
                 )
+                .andDocument("get-insights-success")
         }
 
     }
@@ -184,7 +193,8 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
             {
               "sourceId": 1,
               "filterTags": [],
-              "note": "The money is always right!"
+              "note": "The money is always right!",
+              "quote": null
             }
         """.trimIndent()
 
@@ -203,6 +213,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isAccepted,
                     content().string("")
                 )
+                .andDocument("update-insight-success")
         }
 
         @Test
@@ -219,6 +230,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "Insight not found"}""")
                 )
+                .andDocument("update-insight-error_insight-not-found")
         }
 
         @Test
@@ -235,6 +247,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "Source not found"}""")
                 )
+                .andDocument("update-insight-error_source-not-found")
         }
 
         @Test
@@ -251,6 +264,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "Source not found"}""")
                 )
+                .andDocument("update-insight-error_source-does-not-belong-to-user")
         }
 
     }
@@ -271,6 +285,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNoContent,
                     content().string("")
                 )
+                .andDocument("delete-insight-success")
         }
 
         @Test
@@ -285,6 +300,7 @@ class InsightControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                     status().isNotFound,
                     content().json("""{"error": "Insight not found"}""")
                 )
+                .andDocument("delete-insight-error_insight-not-found")
         }
 
     }

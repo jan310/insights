@@ -3,7 +3,8 @@ plugins {
     kotlin("plugin.spring") version "1.9.23"
     id("org.springframework.boot") version "3.3.3"
     id("io.spring.dependency-management") version "1.1.6"
-    id("io.gitlab.arturbosch.detekt").version("1.23.6")
+    id("org.asciidoctor.jvm.convert") version "3.3.2"
+    id("io.gitlab.arturbosch.detekt") version "1.23.6"
 }
 
 group = "jan.ondra"
@@ -37,6 +38,7 @@ dependencies {
     testImplementation("org.testcontainers:postgresql")
     testImplementation("io.rest-assured:rest-assured:5.5.0")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -49,4 +51,20 @@ kotlin {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+// To generate the documentation, run: ./gradlew asciidoctor
+// The adoc-snippets will be created in the build/generated-snippets folder
+// The documentation will be created in the build/docs/asciidoc folder
+
+extra["snippetsDir"] = file("build/generated-snippets")
+
+tasks.test {
+    outputs.dir(project.extra["snippetsDir"]!!)
+}
+
+tasks.asciidoctor {
+    inputs.dir(project.extra["snippetsDir"]!!)
+    dependsOn(tasks.test)
+    attributes(mapOf("snippets" to project.extra["snippetsDir"]!!))
 }
