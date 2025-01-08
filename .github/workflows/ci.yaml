@@ -22,7 +22,7 @@ jobs:
           cache: 'gradle'
 
       - name: Build and run tests
-        run: ./gradlew build
+        run: ./gradlew build --no-daemon
 
       - name: Build Docker image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/insights:latest .
