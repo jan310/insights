@@ -17,9 +17,9 @@ jobs:
       - name: Install Java and setup dependency caching
         uses: actions/setup-java@v4
         with:
-          distribution: 'corretto'
-          java-version: '21'
-          cache: 'gradle'
+          distribution: corretto
+          java-version: 21
+          cache: gradle
 
       - name: Build and run tests
         run: ./gradlew build --no-daemon
