@@ -49,6 +49,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
             {
               "email": "user1@email.com",
               "notificationEnabled": false,
+              "notificationTime": 6,
               "notificationFilterTags": ["PERSONAL_DEVELOPMENT", "WEALTH_CREATION"]
             }
         """.trimIndent()
@@ -115,6 +116,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
                 id = USER_1_ID,
                 email = "user1@email.com",
                 notificationEnabled = false,
+                notificationTime = 6,
                 notificationFilterTags = listOf(PERSONAL_DEVELOPMENT, WEALTH_CREATION)
             )
 
@@ -163,6 +165,7 @@ class UserControllerMvcTest(@Autowired private val mockMvc: MockMvc) {
             {
               "email": "user1@email.com",
               "notificationEnabled": false,
+              "notificationTime": 6,
               "notificationFilterTags": ["PERSONAL_DEVELOPMENT", "WEALTH_CREATION"]
             }
         """.trimIndent()

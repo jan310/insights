@@ -43,10 +43,10 @@ class SourceEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
                 DELETE FROM users;
                 
                 INSERT INTO users
-                    (id, email, notification_enabled, notification_filter_tags)
+                    (id, email, notification_enabled, notification_time, notification_filter_tags)
                 VALUES
-                    ('$USER_1_ID', 'user1@email.com', true, ARRAY[]::VARCHAR[]),
-                    ('$USER_2_ID', 'user2@email.com', true, ARRAY[]::VARCHAR[]);
+                    ('$USER_1_ID', 'user1@email.com', true, 6, ARRAY[]::VARCHAR[]),
+                    ('$USER_2_ID', 'user2@email.com', true, 6, ARRAY[]::VARCHAR[]);
                     
                 INSERT INTO sources
                     (user_id, name, description, isbn_13)

@@ -27,6 +27,7 @@ class ValidatorsTest {
         private val userDto = UserDto(
             email = "",
             notificationEnabled = true,
+            notificationTime = 6,
             notificationFilterTags = emptyList()
         )
 

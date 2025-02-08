@@ -6,6 +6,7 @@ data class User(
     val id: String,
     val email: String,
     val notificationEnabled: Boolean,
+    val notificationTime: Int,
     val notificationFilterTags: List<FilterTag>,
 )
 

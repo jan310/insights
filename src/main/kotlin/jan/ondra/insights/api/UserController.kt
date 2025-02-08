@@ -32,6 +32,7 @@ class UserController(private val userService: UserService) {
                 id = getUserIdFromBearerToken(bearerToken),
                 email = userDto.email,
                 notificationEnabled = userDto.notificationEnabled,
+                notificationTime = userDto.notificationTime,
                 notificationFilterTags = userDto.notificationFilterTags
             )
         )
@@ -52,6 +53,7 @@ class UserController(private val userService: UserService) {
                 id = getUserIdFromBearerToken(bearerToken),
                 email = userDto.email,
                 notificationEnabled = userDto.notificationEnabled,
+                notificationTime = userDto.notificationTime,
                 notificationFilterTags = userDto.notificationFilterTags
             )
         )

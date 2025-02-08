@@ -24,6 +24,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
                 id,
                 email,
                 notification_enabled,
+                notification_time,
                 notification_filter_tags
             )
             VALUES
@@ -31,6 +32,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
                 :id,
                 :email,
                 :notification_enabled,
+                :notification_time,
                 ARRAY[:notification_filter_tags]::VARCHAR[]
             );
         """.trimIndent()
@@ -39,6 +41,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
             "id" to user.id,
             "email" to user.email,
             "notification_enabled" to user.notificationEnabled,
+            "notification_time" to user.notificationTime,
             "notification_filter_tags" to user.notificationFilterTags.map { it.name },
         )
 
@@ -72,6 +75,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
             SET
                 email = :email,
                 notification_enabled = :notification_enabled,
+                notification_time = :notification_time,
                 notification_filter_tags = ARRAY[:notification_filter_tags]::VARCHAR[]
             WHERE
                 id = :id;
@@ -81,6 +85,7 @@ class UserRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) {
             "id" to user.id,
             "email" to user.email,
             "notification_enabled" to user.notificationEnabled,
+            "notification_time" to user.notificationTime,
             "notification_filter_tags" to user.notificationFilterTags.map { it.name },
         )
 
@@ -112,6 +117,7 @@ class UserRowMapper : RowMapper<User> {
             id = rs.getString("id"),
             email = rs.getString("email"),
             notificationEnabled = rs.getBoolean("notification_enabled"),
+            notificationTime = rs.getInt("notification_time"),
             notificationFilterTags = (rs.getArray("notification_filter_tags").array as Array<String>)
                 .map { enumValueOf<FilterTag>(it) }
         )

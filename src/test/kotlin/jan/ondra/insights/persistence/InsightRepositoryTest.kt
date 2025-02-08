@@ -49,10 +49,10 @@ class InsightRepositoryTest(
                 DELETE FROM users;
                 
                 INSERT INTO users
-                    (id, email, notification_enabled, notification_filter_tags)
+                    (id, email, notification_enabled, notification_time, notification_filter_tags)
                 VALUES
-                    ('1', 'user1@email.com', true, ARRAY[]::VARCHAR[]),
-                    ('2', 'user2@email.com', true, ARRAY[]::VARCHAR[]);
+                    ('1', 'user1@email.com', true, 6, ARRAY[]::VARCHAR[]),
+                    ('2', 'user2@email.com', true, 6, ARRAY[]::VARCHAR[]);
                     
                 INSERT INTO sources
                     (user_id, name, description, isbn_13)

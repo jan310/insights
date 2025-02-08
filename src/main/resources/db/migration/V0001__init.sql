@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS users
     id                          VARCHAR(64)     PRIMARY KEY,
     email                       VARCHAR(320)    UNIQUE NOT NULL,
     notification_enabled        BOOLEAN         NOT NULL,
+    notification_time           SMALLINT        NOT NULL,
     notification_filter_tags    VARCHAR(100)[]  NOT NULL
 );
 

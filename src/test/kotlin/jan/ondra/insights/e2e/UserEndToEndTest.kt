@@ -42,9 +42,9 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
                 DELETE FROM users;
                 
                 INSERT INTO users
-                    (id, email, notification_enabled, notification_filter_tags)
+                    (id, email, notification_enabled, notification_time, notification_filter_tags)
                 VALUES
-                    ('$USER_1_ID', 'user1@email.com', true, ARRAY['PERSONAL_DEVELOPMENT']::VARCHAR[]);
+                    ('$USER_1_ID', 'user1@email.com', true, 6, ARRAY['PERSONAL_DEVELOPMENT']::VARCHAR[]);
             """.trimIndent()
         )
     }
@@ -59,6 +59,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
                     {
                         "email": "user2@email.com",
                         "notificationEnabled": false,
+                        "notificationTime": 6,
                         "notificationFilterTags": ["PERSONAL_DEVELOPMENT", "WEALTH_CREATION"]
                     }
                 """.trimIndent()
@@ -75,6 +76,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
                 id = USER_2_ID,
                 email = "user2@email.com",
                 notificationEnabled = false,
+                notificationTime = 6,
                 notificationFilterTags = listOf(PERSONAL_DEVELOPMENT, WEALTH_CREATION),
             )
         )
@@ -105,6 +107,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
                     {
                         "email": "new@email.com",
                         "notificationEnabled": true,
+                        "notificationTime": 6,
                         "notificationFilterTags": ["WEALTH_CREATION"]
                     }
                 """.trimIndent()
@@ -121,6 +124,7 @@ class UserEndToEndTest(@Autowired private val jdbcTemplate: JdbcTemplate) {
                 id = USER_1_ID,
                 email = "new@email.com",
                 notificationEnabled = true,
+                notificationTime = 6,
                 notificationFilterTags = listOf(WEALTH_CREATION),
             )
         )

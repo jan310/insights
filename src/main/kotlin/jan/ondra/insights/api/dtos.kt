@@ -13,6 +13,7 @@ data class ErrorDto(
 data class UserDto(
     val email: String,
     val notificationEnabled: Boolean,
+    val notificationTime: Int,
     val notificationFilterTags: List<FilterTag>
 )
 
